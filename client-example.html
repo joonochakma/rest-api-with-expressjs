@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REST API Client Example</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; }
+        .section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+        input, button { margin: 5px; padding: 8px; }
+        button { background: #007bff; color: white; border: none; cursor: pointer; border-radius: 3px; }
+        button:hover { background: #0056b3; }
+        .response { background: #f5f5f5; padding: 10px; margin-top: 10px; border-radius: 3px; white-space: pre-wrap; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h1>REST API Client Example</h1>
+    
+    <div class="section">
+        <h2>Register</h2>
+        <input type="text" id="regUsername" placeholder="Username">
+        <input type="email" id="regEmail" placeholder="Email">
+        <input type="password" id="regPassword" placeholder="Password">
+        <button onclick="register()">Register</button>
+        <div id="regResponse" class="response"></div>
+    </div>
+
+    <div class="section">
+        <h2>Login</h2>
+        <input type="email" id="loginEmail" placeholder="Email">
+        <input type="password" id="loginPassword" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <div id="loginResponse" class="response"></div>
+    </div>
+
+    <div class="section">
+        <h2>Get Current User</h2>
+        <button onclick="getCurrentUser()">Get Me</button>
+        <div id="meResponse" class="response"></div>
+    </div>
+
+    <div class="section">
+        <h2>Get All Users</h2>
+        <button onclick="getUsers()">Get Users</button>
+        <div id="usersResponse" class="response"></div>
+    </div>
+
+    <div class="section">
+        <h2>Logout</h2>
+        <button onclick="logout()">Logout</button>
+        <div id="logoutResponse" class="response"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8080/api';
+
+        async function register() {
+            const username = document.getElementById('regUsername').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            
+            try {
+                const response = await fetch(`${API_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password }),
+                });
+                const data = await response.json();
+                document.getElementById('regResponse').innerHTML = JSON.stringify(data, null, 2);
+                document.getElementById('regResponse').className = response.ok ? 'response success' : 'response error';
+            } catch (error) {
+                document.getElementById('regResponse').innerHTML = error.message;
+                document.getElementById('regResponse').className = 'response error';
+            }
+        }
+
+        async function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password }),
+                });
+                const data = await response.json();
+                document.getElementById('loginResponse').innerHTML = JSON.stringify(data, null, 2);
+                document.getElementById('loginResponse').className = response.ok ? 'response success' : 'response error';
+            } catch (error) {
+                document.getElementById('loginResponse').innerHTML = error.message;
+                document.getElementById('loginResponse').className = 'response error';
+            }
+        }
+
+        async function getCurrentUser() {
+            try {
+                const response = await fetch(`${API_URL}/auth/me`, {
+                    credentials: 'include',
+                });
+                const data = await response.json();
+                document.getElementById('meResponse').innerHTML = JSON.stringify(data, null, 2);
+                document.getElementById('meResponse').className = response.ok ? 'response success' : 'response error';
+            } catch (error) {
+                document.getElementById('meResponse').innerHTML = error.message;
+                document.getElementById('meResponse').className = 'response error';
+            }
+        }
+
+        async function getUsers() {
+            try {
+                const response = await fetch(`${API_URL}/users`, {
+                    credentials: 'include',
+                });
+                const data = await response.json();
+                document.getElementById('usersResponse').innerHTML = JSON.stringify(data, null, 2);
+                document.getElementById('usersResponse').className = response.ok ? 'response success' : 'response error';
+            } catch (error) {
+                document.getElementById('usersResponse').innerHTML = error.message;
+                document.getElementById('usersResponse').className = 'response error';
+            }
+        }
+
+        async function logout() {
+            try {
+                const response = await fetch(`${API_URL}/auth/logout`, {
+                    method: 'POST',
+                    credentials: 'include',
+                });
+                const data = await response.json();
+                document.getElementById('logoutResponse').innerHTML = JSON.stringify(data, null, 2);
+                document.getElementById('logoutResponse').className = response.ok ? 'response success' : 'response error';
+            } catch (error) {
+                document.getElementById('logoutResponse').innerHTML = error.message;
+                document.getElementById('logoutResponse').className = 'response error';
+            }
+        }
+    </script>
+</body>
+</html>
