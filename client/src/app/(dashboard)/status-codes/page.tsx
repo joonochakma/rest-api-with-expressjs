@@ -41,17 +41,22 @@ const statusCodeCategories: StatusCategory[] = [
       {
         code: 100,
         name: "Continue",
-        description: "Request received, continue.",
+        description: "Request received by the server and the client should proceed with the request or ignore the response if the request has already finished.",
       },
       {
         code: 101,
         name: "Switching Protocols",
-        description: "Server switching protocol.",
+        description: "Server switching protocol, the server udnerstands the upgrtade header field request and need to indicate which protocol is being switched to.",
       },
       {
         code: 102,
         name: "Processing",
-        description: "Server is processing request.",
+        description: "Server is processing request. Server has accepted the request but has not yet completed it.",
+      },
+      {
+        code: 103,
+        name: "Early Hints",
+        description: "Server is providing early hints for the client. While the server prepares a response.",
       },
     ],
   },
@@ -64,35 +69,17 @@ const statusCodeCategories: StatusCategory[] = [
       {
         code: 201,
         name: "Created",
-        description: "Resource successfully created.",
+        description: "Request was successfully fulfilled and a new resource has been created.",
       },
       {
         code: 202,
         name: "Accepted",
-        description: "Request accepted for processing.",
+        description: "Request accepted for processing. But the processing has not been completed.",
       },
       {
         code: 204,
         name: "No Content",
-        description: "Request succeeded but no response body.",
-      },
-    ],
-  },
-  {
-    category: "3xx - Redirection",
-    icon: ArrowPathIcon,
-    color: "bg-yellow-100 text-yellow-800 border-yellow-200",
-    codes: [
-      {
-        code: 301,
-        name: "Moved Permanently",
-        description: "Resource moved permanently.",
-      },
-      { code: 302, name: "Found", description: "Temporary redirect." },
-      {
-        code: 304,
-        name: "Not Modified",
-        description: "Resource not modified.",
+        description: "Request successfuly fulfilled from the server. But no response body.",
       },
     ],
   },
@@ -104,19 +91,19 @@ const statusCodeCategories: StatusCategory[] = [
       {
         code: 400,
         name: "Bad Request",
-        description: "Invalid request syntax.",
+        description: "Server could not understand the request because of invalid syntax.",
       },
       {
         code: 401,
         name: "Unauthorized",
-        description: "Authentication required.",
+        description: "Authentication required. Server doesnt recognize the client credentials.",
       },
-      { code: 403, name: "Forbidden", description: "Server refuses request." },
+      { code: 403, name: "Forbidden", description: "Server refuses request. Server knows the client credentials. But often restricts to your permission" },
       { code: 404, name: "Not Found", description: "Resource not found." },
       {
         code: 405,
         name: "Method Not Allowed",
-        description: "HTTP method not supported.",
+        description: "HTTP method not supported. Or request methods is not allowed for the resource.",
       },
     ],
   },
@@ -128,7 +115,7 @@ const statusCodeCategories: StatusCategory[] = [
       {
         code: 500,
         name: "Internal Server Error",
-        description: "Unexpected server error.",
+        description: "Unexpected server error. Not client issue. Best way to handle is by checking the server logs",
       },
       {
         code: 501,
@@ -143,7 +130,7 @@ const statusCodeCategories: StatusCategory[] = [
       {
         code: 503,
         name: "Service Unavailable",
-        description: "Server temporarily unavailable.",
+        description: "Server temporarily unavailable. Usually due to overload or maintenance.",
       },
     ],
   },
